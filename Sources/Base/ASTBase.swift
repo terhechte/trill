@@ -55,7 +55,7 @@ struct SourceLocation: CustomStringConvertible {
     self.charOffset = charOffset
   }
   var description: String {
-    return "<line: \(line), col: \(column)>"
+    return "<file: \(file ?? "<none>") line: \(line), col: \(column)>"
   }
   static let zero = SourceLocation(line: 0, column: 0)
 }
