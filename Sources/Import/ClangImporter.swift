@@ -299,10 +299,7 @@ class ClangImporter: Pass {
     let returnTy = clang_getResultType(funcType)
     
     guard let trillRetTy = convertToTrillType(returnTy) else { return }
-    
-    if name == "memmove" {
-      
-    }
+
     var args = [DataType]()
     var argRanges = [SourceRange]()
     for i in 0..<numArgs {
