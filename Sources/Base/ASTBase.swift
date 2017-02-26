@@ -79,6 +79,12 @@ struct SourceRange {
   static let zero = SourceRange(start: .zero, end: .zero)
 }
 
+extension SourceRange: Equatable {
+  static func ==(lhs: SourceRange, rhs: SourceRange) -> Bool {
+    return lhs.start == rhs.start && lhs.end == rhs.end
+  }
+}
+
 struct Identifier: CustomStringConvertible, ExpressibleByStringLiteral, Equatable, Hashable {
   let name: String
   let range: SourceRange?
