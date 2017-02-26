@@ -208,7 +208,7 @@ class VarExpr: Expr, LValue {
   var decl: Decl? = nil
   init(name: Identifier, sourceRange: SourceRange? = nil) {
     self.name = name
-    super.init(sourceRange: sourceRange)
+    super.init(sourceRange: sourceRange ?? name.range)
   }
   override func attributes() -> [String : Any] {
     var superAttrs = super.attributes()
