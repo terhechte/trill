@@ -45,6 +45,7 @@ enum SemaError: Error, CustomStringConvertible {
   case cannotOverloadOperator(op: BuiltinOperator, type: String)
   case isCheckAlways(fails: Bool)
   case pointerFieldAccess(lhs: DataType, field: Identifier)
+  case tuplePropertyAccess(lhs: DataType, field: Identifier)
   
   var description: String {
     switch self {
@@ -148,6 +149,8 @@ enum SemaError: Error, CustomStringConvertible {
       return "`is` check always \(fails ? "fails" : "succeeds")"
     case .pointerFieldAccess(let lhs, let field):
       return "cannot access field \(field) of pointer type \(lhs)"
+    case .tuplePropertyAccess(let lhs, let field):
+      return "cannot access property \(field) on tuple type \(lhs)"
     }
   }
 }
@@ -398,9 +401,17 @@ class Sema: ASTTransformer, Pass {
     }
     if case .function = type {
       error(SemaError.fieldOfFunctionType(type: type),
-            loc: expr.startLoc,
+            loc: expr.dotLoc,
             highlights: [
               expr.sourceRange
+        ])
+      return .property
+    }
+    if case .tuple = type {
+      error(SemaError.tuplePropertyAccess(lhs: type, field: expr.name),
+            loc: expr.dotLoc,
+            highlights: [
+              expr.name.range
         ])
       return .property
     }
